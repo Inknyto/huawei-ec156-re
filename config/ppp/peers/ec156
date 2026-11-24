@@ -1,0 +1,19 @@
+# PPP peer for a CDMA Huawei EC156.
+# Install as /etc/ppp/peers/ec156 (root:root 0644).
+#
+# CDMA dial-up uses ATD#777.  A provisioned R-UIM/NAM and an active CDMA
+# account are required; this unit reports "R-UIM not inserted" and CSQ 99.
+# Bring up with:  sudo pppd call ec156
+# Tear down with: sudo pkill -f 'pppd call ec156'
+
+noauth
+defaultroute
+usepeerdns
+persist
+noipdefault
+ipcp-accept-local
+ipcp-accept-remote
+mtu 1500
+mru 1500
+connect "/usr/sbin/chat -v -f /etc/chatscripts/ec156-connect"
+disconnect "/usr/sbin/chat -v -f /etc/chatscripts/ec156-disconnect"

@@ -1,0 +1,9 @@
+# Chat script for tearing down the EC156 PPP link.
+# Install as /etc/chatscripts/ec156-disconnect (root:root 0644).
+
+ABORT 'ERROR'
+ABORT 'NO CARRIER'
+'' '\K'
+'' '+++\c'
+OK ATH
+OK ''

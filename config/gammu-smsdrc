@@ -1,0 +1,31 @@
+# /etc/gammu-smsdrc for a Huawei EC156 CDMA modem.
+#
+# Observed on this unit: AT+CPIN? reports "R-UIM not inserted" and
+# AT+CMGS returned "COMMAND NOT SUPPORT" without a UIM.  SMS service therefore
+# needs a provisioned R-UIM/SIM and a CDMA account; this file is the reusable
+# daemon configuration for that case.
+#
+# Install:
+#   sudo install -m 0640 config/gammu-smsdrc /etc/gammu-smsdrc
+#   sudo install -m 0755 config/sms_received.sh /usr/local/bin/ec156-sms-received
+#   sudo mkdir -p /var/log/gammu /var/spool/gammu/{inbox,outbox,sent,error} /var/lib/ec156-sms
+#   sudo systemctl enable --now ec156-smsd.service
+
+[gammu]
+device = /dev/ttyUSB0
+connection = at
+name = Huawei EC156
+logformat = textall
+logfile = /var/log/gammu/ec156-gammu.log
+commtimeout = 30
+
+[smsd]
+service = files
+logfile = /var/log/gammu/ec156-smsd.log
+inboxpath = /var/spool/gammu/inbox/
+outboxpath = /var/spool/gammu/outbox/
+sentsmspath = /var/spool/gammu/sent/
+errorsmspath = /var/spool/gammu/error/
+RunOnReceive = /usr/local/bin/ec156-sms-received
+# PIN = 1234
+# CheckSecurity = 0

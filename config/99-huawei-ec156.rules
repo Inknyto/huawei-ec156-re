@@ -1,0 +1,19 @@
+# Huawei EC156 (12d1:140c) permissions for non-root AT/QMI use.
+# Install as /etc/udev/rules.d/99-huawei-ec156.rules and run:
+#   sudo udevadm control --reload-rules
+#   sudo udevadm trigger
+#
+# The EC156 exposes three AT-capable/DIAG serial ports plus cdc-wdm0.
+# cdc-wdm0 is normally root:root 0600 and prevents qmicli without sudo.
+
+ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="12d1", ATTR{idProduct}=="140c", TAG+="uaccess", MODE="0660", GROUP="uucp"
+
+KERNEL=="ttyUSB[0-9]*", SUBSYSTEM=="tty", ATTRS{idVendor}=="12d1", ATTRS{idProduct}=="140c", TAG+="uaccess", MODE="0660", GROUP="uucp"
+
+KERNEL=="cdc-wdm[0-9]*", SUBSYSTEM=="usbmisc", ATTRS{idVendor}=="12d1", ATTRS{idProduct}=="140c", TAG+="uaccess", MODE="0660", GROUP="uucp"
+
+# Optional stable symlinks.  Verify the interface mapping first; on this
+# firmware MDM=0, NDIS/QMI=1, DIAG=2, PCUI=3, CDROM=4.
+# KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="12d1", ATTRS{idProduct}=="140c", ATTRS{bInterfaceNumber}=="00", SYMLINK+="ec156-at"
+# KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="12d1", ATTRS{idProduct}=="140c", ATTRS{bInterfaceNumber}=="02", SYMLINK+="ec156-diag"
+# KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="12d1", ATTRS{idProduct}=="140c", ATTRS{bInterfaceNumber}=="03", SYMLINK+="ec156-pcui"

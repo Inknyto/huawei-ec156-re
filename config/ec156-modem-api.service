@@ -1,0 +1,22 @@
+[Unit]
+Description=Huawei EC156 HTTP/TCP AT bridge
+Documentation=file:/opt/ec156-re/REPORT.md
+After=network.target
+
+[Service]
+Type=simple
+User=nyto
+Group=uucp
+# Adjust the path if the ec156-re tree was installed elsewhere.
+WorkingDirectory=/opt/ec156-re
+ExecStart=/usr/bin/python3 /opt/ec156-re/scripts/modem_http.py --serial auto --bind 127.0.0.1 --http-port 8080 --tcp-port 9000
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/ec156-sms
+
+[Install]
+WantedBy=multi-user.target

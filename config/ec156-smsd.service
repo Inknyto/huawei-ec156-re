@@ -1,0 +1,15 @@
+[Unit]
+Description=Gammu SMS daemon for Huawei EC156
+Documentation=man:gammu-smsd(1)
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/run/gammu-smsd.pid
+ExecStart=/usr/bin/gammu-smsd --config /etc/gammu-smsdrc --pid /run/gammu-smsd.pid --daemon
+ExecReload=/usr/bin/gammu-smsd --config /etc/gammu-smsdrc --pid /run/gammu-smsd.pid --reload
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
